@@ -10,12 +10,13 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/stream")
 public class StreamController {
+
     @Inject
     StreamServices streamServices;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Stream post";
+        return streamServices.greeting();
     }
 }

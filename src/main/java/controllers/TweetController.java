@@ -16,6 +16,6 @@ public class TweetController {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Tweet post";
+        return tweetServices.greeting();
     }
 }
