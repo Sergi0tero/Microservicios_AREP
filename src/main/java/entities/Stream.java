@@ -10,4 +10,5 @@ public class Stream {
     public void setTweets(Tweet[] tweets) {
         this.tweets = tweets;
     }
+
 }

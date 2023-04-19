@@ -1,10 +1,21 @@
 package entities;
 
-import java.util.Date;
 
 public class Tweet {
+
+    private String id;
     private String content;
-    private Date date;
+    private User user;
+
+    public Tweet(){
+
+    }
+
+    public Tweet(String id, String content, User user) {
+        this.id = id;
+        this.content = content;
+        this.user = user;
+    }
 
     public String getContent() {
         return content;
@@ -14,11 +25,11 @@ public class Tweet {
         this.content = content;
     }
 
-    public Date getDate() {
-        return date;
+    public String getId() {
+        return id;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setId(String date) {
+        this.id = id;
     }
 }

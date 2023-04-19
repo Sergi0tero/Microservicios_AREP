@@ -1,5 +1,7 @@
 package controllers;
 
+import entities.Tweet;
+import entities.User;
 import services.UserServices;
 
 import javax.annotation.security.PermitAll;
@@ -10,7 +12,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.List;
 
 @Path("/users")
 public class UserController {
@@ -18,18 +22,14 @@ public class UserController {
     UserServices userServices;
 
     @GET
-    @Path("permit-all")
-    @PermitAll
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@Context SecurityContext ctx) {
-        return userServices.getResponseString(ctx);
+    public List<User> list() {
+        return userServices.list();
     }
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/user")
-    public String postUser(){
-        return "post";
+    public Response add(User user){
+        userServices.add(user);
+        return Response.status(Response.Status.CREATED).build();
     }
 
 }

@@ -1,42 +1,57 @@
 package services;
 
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import entities.Tweet;
+import entities.User;
+import org.bson.Document;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.SecurityContext;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mongodb.client.model.Sorts.descending;
 
 @ApplicationScoped
 public class UserServices {
 
     @Inject
-    JsonWebToken jwt;
+    MongoClient mc;
 
-    public String greeting() {
-        return "user services ";
-    }
+    public List<User> list(){
 
-    public String getResponseString(SecurityContext ctx) {
-        String name;
-        if (ctx.getUserPrincipal() == null) {
-            name = "anonymous";
-        } else if (!ctx.getUserPrincipal().getName().equals(jwt.getName())) {
-            throw new InternalServerErrorException("Principal and JsonWebToken names do not match");
-        } else {
-            name = ctx.getUserPrincipal().getName();
+        List<User> list = new ArrayList<>();
+        MongoCursor<Document> cursor = getCollection().find().iterator();
+
+        try {
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                User user = new User();
+                user.setUserId(document.getString("userID"));
+                user.setPwd(document.getString("password"));
+                list.add(user);
+            }
+        } finally {
+            cursor.close();
         }
-        return String.format("hello + %s,"
-                        + " isHttps: %s,"
-                        + " authScheme: %s,"
-                        + " hasJWT: %s",
-                name, ctx.isSecure(), ctx.getAuthenticationScheme(), hasJwt());
+        return list;
     }
 
-    private boolean hasJwt() {
-        return jwt.getClaimNames() != null;
+    public void add(User user){
+        Document document = new Document()
+                .append("userId", user.getUserId())
+                .append("password", user.getPwd());
+        getCollection().insertOne(document);
     }
 
+    private MongoCollection<Document> getCollection(){
+        return mc.getDatabase("tweets").getCollection("users");
+    }
 
 }
