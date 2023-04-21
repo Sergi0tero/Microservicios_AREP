@@ -1,56 +1,61 @@
-# code-with-quarkus
+# TAREA DE MICROSERVICIOS
+**Integrantes**
+- Enrique Gonzalez
+- Julian Largo
+- Sergio Andres Otero
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Se diseño un API  Quarkus que permite a los usuarios hacer posts de 140 caracteres e ir registrandolos en un stream único de posts (a la Twitter). Piense en tres entidades Usuario, hilo(stream), posts, todos estos datos se guardaron en una base de datos de mongo alojada en mongo atlas, se uso una instancia de EC2 para alojar la api y un bucket S3 en donde se guardan los archivos estaticos.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+![image](https://user-images.githubusercontent.com/98104282/233527363-55cf2edf-346f-44f4-b970-73a3f8c406cd.png)
 
-## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
+
+## Que es Quarkus?
+ - Quarkus es un marco de Java diseñado para su implementación en Kubernetes. Los componentes tecnológicos clave que lo rodean son OpenJDK HotSpot y GraalVM.
+ 
+## Iniciando
+
+## Instalando Quarkus
+Si estamos en una distribución de linux ponemos los siguientes comandos 
 ```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./mvnw package
+curl -Ls https://sh.jbang.dev | bash -s - trust add https://repo1.maven.org/maven2/io/quarkus/quarkus-cli/
+curl -Ls https://sh.jbang.dev | bash -s - app install --fresh --force quarkus@quarkusio
+``` 
+Si es una distribución windows utilizando powershell:
 ```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+iex "& { $(iwr https://ps.jbang.dev) } trust add https://repo1.maven.org/maven2/io/quarkus/quarkus-cli/"
+iex "& { $(iwr https://ps.jbang.dev) } app install --fresh --force quarkus@quarkusio"
 ```
+En este punto se debe reiniciar la consola para que el comando se instale comando correctamente 
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
 
-## Creating a native executable
+En este caso subimos el proyecto a una instancia EC2 de AWS
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
+![image](https://user-images.githubusercontent.com/98104282/233528598-c2cbffb4-857f-4614-9a44-507084eb65db.png)
+
+
+, dentro de la consola de la instancia instalamos quarkus como se indico mas arriba, importamos el proyecto y en la carpeta raiz ponemos el siguiente comando
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
+quarkus dev
 ```
+y deberia aparecer algo asi
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+![image](https://user-images.githubusercontent.com/98104282/233528481-044beb6f-4eea-4d6d-888d-3b946fea7bb3.png)
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+Significa que el servicio esta corriendo y escuchando por el puerto 8080
 
-## Provided Code
+Los archivos estaticos(HTML y JS)se guardaron en un bucket S3
 
-### RESTEasy Reactive
+![image](https://user-images.githubusercontent.com/98104282/233529027-20336ab0-db73-4d96-a058-f72bcb916666.png)
 
-Easily start your Reactive RESTful Web Services
+Imagen del mongo atlas
+![image](https://user-images.githubusercontent.com/98104282/233529138-b133ab58-70ac-4d20-ade9-bf5ee0c5ec92.png)
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+ ## Demo de la aplicacion:
+ 
+
+https://user-images.githubusercontent.com/98104282/233529256-34013578-039b-4e22-be98-c73bfc57f0ec.mp4
+
+
+
+
